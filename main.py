@@ -33,7 +33,7 @@ class WeatherApp(QWidget):
 
         try:
             response = requests.get(complete_url)
-            response.raise_for_status()  # Проверяем статус ответа
+            response.raise_for_status()  
             data = response.json()
 
             main_data = data["main"]
