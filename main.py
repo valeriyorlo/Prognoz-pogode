@@ -1,15 +1,16 @@
 import sys
+
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout
 import requests
-
 
 class WeatherApp(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Прогноз погоды")
-        self.setGeometry(100, 100, 300, 200)
+        self.setGeometry(200, 200, 800, 400)
 
-        self.city_label = QLabel("Введите название города:")
+        self.city_label = QLabel("Введите название города на русском или английском языке:")
         self.city_entry = QLineEdit()
         self.get_weather_button = QPushButton("Узнать погоду")
         self.result_label = QLabel("")
@@ -24,6 +25,7 @@ class WeatherApp(QWidget):
         self.setLayout(layout)
 
         self.get_weather_button.clicked.connect(self.get_weather)
+        self.city_entry.returnPressed.connect(self.get_weather)  
 
     def get_weather(self):
         city = self.city_entry.text()
@@ -33,7 +35,7 @@ class WeatherApp(QWidget):
 
         try:
             response = requests.get(complete_url)
-            response.raise_for_status()  
+            response.raise_for_status()
             data = response.json()
 
             main_data = data["main"]
@@ -49,9 +51,8 @@ class WeatherApp(QWidget):
         except Exception as e:
             self.result_label.setText("Произошла ошибка: " + str(e))
 
-
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    app = QApplication([])
     window = WeatherApp()
     window.show()
     sys.exit(app.exec_())
